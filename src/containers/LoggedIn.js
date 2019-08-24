@@ -75,6 +75,8 @@ type State = {
 };
 
 class LoggedIn extends React.Component<Props, State> {
+  interval;
+
   state = {
     selectedFilter: '',
   };
@@ -92,6 +94,16 @@ class LoggedIn extends React.Component<Props, State> {
 
   componentDidMount() {
     this.props.fetchHistory();
+
+    this.interval = setInterval(() => {
+      console.log(new Date());
+      this.props.fetchHistory();
+    }, 20000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+    this.interval = null;
   }
 
   setFilter = (filterName) => {
