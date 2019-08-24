@@ -1,3 +1,5 @@
 // @flow
 export const SET_BALANCE = 'SET_BALANCE';
 export const INIT_WALLET_SDK = 'INIT_WALLET_SDK';
+export const SET_PAYMENTS_HISTORY = 'SET_PAYMENTS_HISTORY';
+export const SET_DATA_HISTORY = 'SET_DATA_HISTORY';

@@ -5,12 +5,21 @@ import {
   getSdkEnvironment,
   createSdk,
   Sdk,
+  sdkConstants,
 } from '@archanova/sdk';
 import { toChecksumAddress } from '@netgum/utils';
 import { BigNumber } from 'bignumber.js';
 
+const PAYMENT_COMPLETED = get(sdkConstants, 'AccountPaymentStates.Completed', '');
+
 const NETWORK_PROVIDER = 'ropsten';
 const TOKEN_ADDRESS = '0xF383e4C078b34Da69534A7B7F1F381d418315273';
+
+function addressesEqual(address1: ?string, address2: ?string) {
+  if (address1 === address2) return true;
+  if (!address1 || !address2) return false;
+  return address1.toLowerCase() === address2.toLowerCase();
+}
 
 class Wallet {
   sdk: Sdk;
@@ -158,6 +167,26 @@ class Wallet {
     }
 
     return data.items;
+  }
+
+  async getAccountPaymentsToSettle(accountAddress: string, page?: number = 0) {
+    const filters = {
+      state: PAYMENT_COMPLETED,
+    };
+    const data = await this.sdk.getConnectedAccountPayments(page, filters).catch(this.handleError);
+    if (!data) return [];
+
+    const items = data.items
+      .filter(payment => {
+        const recipientAddress = get(payment, 'recipient.account.address', '');
+        return addressesEqual(recipientAddress, accountAddress);
+      });
+
+    if (data.nextPage) {
+      return [...items, ...(await this.getAccountPaymentsToSettle(accountAddress, page + 1))];
+    }
+
+    return items;
   }
 
   handleError(error: any) {

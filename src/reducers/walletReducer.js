@@ -2,11 +2,15 @@
 import {
   INIT_WALLET_SDK,
   SET_BALANCE,
+  SET_PAYMENTS_HISTORY,
+  SET_DATA_HISTORY,
 } from '../constants/walletConstants';
 
 export type WalletReducerState = {
   balance: string,
   isSdkInitialized: boolean,
+  paymentsHistory: Object[],
+  dataHistory: Object[],
 }
 
 export type WalletReducerAction = {
@@ -17,6 +21,8 @@ export type WalletReducerAction = {
 const initialState = {
   balance: '',
   isSdkInitialized: false,
+  paymentsHistory: [],
+  dataHistory: [],
 };
 
 export default function walletReducer(
@@ -33,6 +39,16 @@ export default function walletReducer(
       return {
         ...state,
         isSdkInitialized: action.payload,
+      };
+    case SET_PAYMENTS_HISTORY:
+      return {
+        ...state,
+        paymentsHistory: action.payload,
+      };
+    case SET_DATA_HISTORY:
+      return {
+        ...state,
+        dataHistory: action.payload,
       };
     default:
       return state;
