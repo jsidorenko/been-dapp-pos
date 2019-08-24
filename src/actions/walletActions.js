@@ -43,18 +43,27 @@ export const fetchHistoryAction = () => {
   return async (dispatch: Function) => {
     const publicKey = Storage.get(STORAGE_KEYS.PUBLIC_KEY, '');
 
-    smartWalletService.getAccountPaymentsToSettle(publicKey).then(payments => {
-      console.log({ payments });
-      dispatch({
-        type: SET_PAYMENTS_HISTORY,
-        payload: payments,
+    smartWalletService.getAccountPaymentsToSettle(publicKey)
+      .then((data = []) => {
+        const payments = data.map(payment => ({
+          sellerId: get(payment, 'sender.account.address', ''),
+          value: get(payment, 'value', new BigNumber(0)).toString(),
+          date: new Date(get(payment, 'updatedAt')),
+        }));
+        dispatch({
+          type: SET_PAYMENTS_HISTORY,
+          payload: payments,
+        });
       });
-    });
 
     ApiService
       .get(ENDPOINTS.GET_SELLER_TRANSACTIONS, { sellerId: publicKey })
-      .then(payments => {
-        console.log({ payments });
+      .then(data => {
+        const payments = data.map(payment => ({
+          sellerId: get(payment, 'sellerId', ''),
+          data: get(payment, 'data', {}),
+          date: new Date(get(payment, 'timestamp')),
+        }));
         dispatch({
           type: SET_DATA_HISTORY,
           payload: payments,
