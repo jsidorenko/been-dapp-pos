@@ -65,16 +65,17 @@ class HeaderBlock extends React.Component<Props> {
   render() {
     const existingPk = Storage.get(STORAGE_KEYS.PRIVATE_KEY);
     if (!existingPk) return <p>Not logged in</p>;
-    console.log(this.props.location);
+    const balance = this.props.balance || 0;
+
     return (
       <HeaderWrapper>
         <MainLink href="/">
           <Title>
-            {this.props.balance || 0} <span style={{ color: '#ff00f2' }}>BEEN</span>
+            {balance} <span style={{ color: '#ff00f2' }}>{parseFloat(balance) === 1 ? 'BEEN' : 'BEENS'}</span>
           </Title>
         </MainLink>
         {!this.props.showExitButton &&
-        <MyProfileButton href="/profile">
+        <MyProfileButton href="/">
           <img src={myProfileIcon}/>
         </MyProfileButton>
         }

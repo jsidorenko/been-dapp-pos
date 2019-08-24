@@ -1,12 +1,21 @@
 // @flow
 
+import get from 'lodash.get';
+import { BigNumber } from 'bignumber.js';
 import smartWalletService from '../services/wallet';
 import { SET_BALANCE, INIT_WALLET_SDK } from '../constants/walletConstants';
-import get from 'lodash.get';
+
+const TOKEN_ADDRESS = '0xF383e4C078b34Da69534A7B7F1F381d418315273';
 
 export const fetchBalanceAction = () => {
   return async (dispatch: Function) => {
-    const balance = await smartWalletService.getAccountBalance();
+    const balances = await smartWalletService.getAccountPendingBalances();
+
+    const tokenBalance = (balances || []).find(token => {
+      return get(token, 'token.address', '').toLowerCase() === TOKEN_ADDRESS.toLowerCase();
+    });
+    const balance = get(tokenBalance, 'incoming', new BigNumber(0));
+
     dispatch({
       type: SET_BALANCE,
       payload: balance.toString(),

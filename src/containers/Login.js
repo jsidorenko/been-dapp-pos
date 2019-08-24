@@ -28,7 +28,7 @@ const checkIfValidPK = async (pk) => {
   }
 };
 
-export default class Home extends React.Component<*, State> {
+export default class Login extends React.Component<*, State> {
   state = {
     redirectToReferrer: false,
     checkRewriteModalOpen: false,

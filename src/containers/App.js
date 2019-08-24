@@ -3,15 +3,13 @@ import { createGlobalStyle } from 'styled-components';
 import { connect, Provider } from 'react-redux';
 
 import LoggedIn from './LoggedIn';
-import Home from './Home';
-import AgendaScreen from './Agenda';
+import Login from './Login';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
 } from 'react-router-dom';
-import Profile from './Profile';
 
 import { Storage, STORAGE_KEYS } from '../services/storage';
 import configureStore from '../configureStore';
@@ -83,9 +81,7 @@ class App extends React.Component<{}, State> {
             <GlobalStyle />
             <Switch>
               <PrivateRoute exact path='/' component={LoggedIn} />
-              <PrivateRoute exact path='/profile' component={Profile} />
-              <PrivateRoute exact path='/agenda' component={AgendaScreen} />
-              <Route path="/:pk" component={Home} />
+              <Route path="/:pk" component={Login} />
             </Switch>
           </Router>
         )}
