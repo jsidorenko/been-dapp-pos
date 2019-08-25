@@ -100,7 +100,7 @@ class LoggedIn extends React.Component<Props, State> {
       console.log(new Date());
       this.props.fetchHistory();
       this.props.fetchBalance();
-    }, 20000);
+    }, 10000);
   }
 
   componentWillUnmount() {
