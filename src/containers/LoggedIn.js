@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import HeaderBlock from "../components/HeaderBlock";
-import { fetchHistoryAction } from '../actions/walletActions';
 import { connect } from 'react-redux';
+import HeaderBlock from "../components/HeaderBlock";
+import { fetchBalanceAction, fetchHistoryAction } from '../actions/walletActions';
 
 const TX_POINTS = 'points';
 const TX_DATA = 'data';
@@ -68,6 +68,7 @@ type Props = {
   paymentsHistory: Object[],
   dataHistory: Object[],
   fetchHistory: Function,
+  fetchBalance: Function,
 };
 
 type State = {
@@ -98,6 +99,7 @@ class LoggedIn extends React.Component<Props, State> {
     this.interval = setInterval(() => {
       console.log(new Date());
       this.props.fetchHistory();
+      this.props.fetchBalance();
     }, 20000);
   }
 
@@ -178,6 +180,7 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchHistory: () => dispatch(fetchHistoryAction()),
+  fetchBalance: () => dispatch(fetchBalanceAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoggedIn);
